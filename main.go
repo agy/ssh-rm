@@ -68,13 +68,8 @@ func main() {
 			panic(err)
 		}
 
-		switch pub.(type) {
-		case *ssh.Certificate:
-			sshCert, ok := pub.(*ssh.Certificate)
-			if !ok {
-				panic(errors.New("invalid SSH certificate"))
-			}
-
+		// If it's a cert, fingerprint the key embedded in the cert
+		if sshCert, ok := pub.(*ssh.Certificate); ok {
 			k, err := ssh.ParsePublicKey(sshCert.Key.Marshal())
 			if err != nil {
 				panic(err)
@@ -83,7 +78,7 @@ func main() {
 			if fpFunc(k) != *fingerprint {
 				continue
 			}
-		default:
+		} else {
 			if fpFunc(pub) != *fingerprint {
 				continue
 			}
