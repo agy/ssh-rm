@@ -1,15 +1,14 @@
-GOOS := linux
+build: vet fmt
+	go $@ .
 
-all: vet fmt build
+linux: vet fmt
+	GOOS=$@ GOARCH=amd64 go build .
 
-vet:
-	go vet .
+darwin: vet fmt
+	GOOS=$@ GOARCH=386 go build .
 
-fmt:
-	go fmt .
+%:
+	go $@ ./...
 
-build:
-	go build .
 
-linux:
-	GOOS=$(GOOS) go build .
+.PHONY: linux darwin build
