@@ -1,11 +1,14 @@
+GOARCH ?= amd64
+
+
 build: vet fmt
 	go $@ .
 
 linux: vet fmt
-	GOOS=$@ GOARCH=amd64 go build .
+	GOOS=$@ GOARCH=$(GOARCH) go build .
 
 darwin: vet fmt
-	GOOS=$@ GOARCH=386 go build .
+	GOOS=$@ GOARCH=$(GOARCH) go build .
 
 %:
 	go $@ ./...
